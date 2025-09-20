@@ -209,6 +209,7 @@ function App() {
 
     const allStudents = schoolsData.flatMap(s => s.students);
     const allTeachers = schoolsData.flatMap(s => s.teachers);
+    const teacherSchool = loggedInUser && loggedInUser.id.startsWith('TCH') ? schoolsData.find(s => s.teachers.some(t => t.id === loggedInUser.id)) : null;
 
     return (
         <div className="dashboard-container">
@@ -221,8 +222,8 @@ function App() {
 
                         {isLoggedIn && userRole === 'teacher' && (
                             <>
-                                <Route path="/teacher-dashboard" element={<TeacherDashboard students={allStudents} />} />
-                                <Route path="/students" element={<TeacherStudentList students={allStudents} />} />
+                                <Route path="/teacher-dashboard" element={<TeacherDashboard students={teacherSchool.students} />} />
+                                <Route path="/students" element={<TeacherStudentList students={teacherSchool.students} />} />
                                 <Route path="/student-profile/:rollNumber" element={<StudentProfile students={allStudents} />} />
                                 <Route path="/teacher-profile/:teacherId" element={<TeacherProfile schools={schoolsData} />} />
                                 <Route path="/attendance" element={<p>This is the Attendance Page for Teachers</p>} />

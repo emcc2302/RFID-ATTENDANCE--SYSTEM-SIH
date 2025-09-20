@@ -1,48 +1,43 @@
 import React from 'react';
 
-// Mock data for the teacher's view with your provided names and IDs
-const teacherDashboardData = {
-    totalStudents: 6,
-    presentToday: 5,
-    absentToday: 1,
-    attendancePercentage: '83.3%', // (5/6) * 100
-    students: [
-        { id: 'CSE234055', name: 'SORIFUL ISLAM SK', class: '3rd year', status: 'Present', time: '09:02 AM' },
-        { id: 'CSE234026', name: 'SHAFAQUN NISA', class: '3rd year', status: 'Present', time: '09:15 AM' },
-        { id: 'CSE234005', name: 'NISHAT KHANAM', class: '3rd year', status: 'Present', time: '09:15 AM' },
-        { id: 'CSE234032', name: 'HUMA MAHFOOZ', class: '3rd year', status: 'Absent', time: '-' },
-        { id: 'CSE234046', name: 'TAMIM HASAN', class: '3rd year', status: 'Present', time: '09:12 AM' },
-        { id: 'CSE243008', name: 'SUSMITA MAITY', class: '3rd year', status: 'Present', time: '09:07 AM' },
-    ],
-};
+function TeacherDashboard({ students }) {
+    if (!students) return <p>Loading student data...</p>;
+    
+    const today = new Date().toISOString().split('T')[0];
+    const totalStudents = students.length;
 
-function TeacherDashboard() {
+    const presentStudents = students.filter(student => {
+        const todayAttendance = student.attendanceHistory.find(record => record.date === today);
+        return todayAttendance && todayAttendance.status === 'Present';
+    });
+    const presentCount = presentStudents.length;
+    const absentCount = totalStudents - presentCount;
+    const attendancePercentage = totalStudents > 0 ? ((presentCount / totalStudents) * 100).toFixed(1) : '0';
+
     return (
         <div>
             <h2>Today's Summary</h2>
             <div className="cards">
                 <div className="card">
                     <h3>Total Students</h3>
-                    <p>{teacherDashboardData.totalStudents}</p>
+                    <p>{totalStudents}</p>
                 </div>
                 <div className="card">
                     <h3>Present Today</h3>
-                    <p>{teacherDashboardData.presentToday}</p>
+                    <p>{presentCount}</p>
                 </div>
                 <div className="card">
                     <h3>Absent Today</h3>
-                    <p>{teacherDashboardData.absentToday}</p>
+                    <p>{absentCount}</p>
+                </div>
+                <div className="card">
+                    <h3>Midday Meal Count</h3>
+                    <p>{presentCount}</p>
                 </div>
                 <div className="card">
                     <h3>Attendance %</h3>
-                    <p>{teacherDashboardData.attendancePercentage}</p>
+                    <p>{attendancePercentage}%</p>
                 </div>
-                
-                <div className="card">
-                    <h3>Midday Meal Count</h3>
-                    <p>{teacherDashboardData.presentToday}</p>
-                </div>
-                
             </div>
             <h2 style={{ margin: '20px 0' }}>All Students' Attendance</h2>
             <table>
@@ -56,20 +51,25 @@ function TeacherDashboard() {
                     </tr>
                 </thead>
                 <tbody>
-                    {teacherDashboardData.students.map((student) => (
-                        <tr key={student.id}>
-                            <td>{student.id}</td>
-                            <td>{student.name}</td>
-                            <td>{student.class}</td>
-                            <td className={student.status === 'Present' ? 'status-present' : 'status-absent'}>
-                                {student.status}
-                            </td>
-                            <td>{student.time}</td>
-                        </tr>
-                    ))}
+                    {students.map((student) => {
+                        const todayAttendance = student.attendanceHistory.find(record => record.date === today);
+                        const status = todayAttendance ? todayAttendance.status : 'N/A';
+                        const time = todayAttendance && todayAttendance.status === 'Present' ? '09:00 AM' : '-';
+
+                        return (
+                            <tr key={student.id}>
+                                <td>{student.rollNumber}</td>
+                                <td>{student.name}</td>
+                                <td>3rd year</td>
+                                <td className={status === 'Present' ? 'status-present' : (status === 'Absent' ? 'status-absent' : '')}>
+                                    {status}
+                                </td>
+                                <td>{time}</td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
-            {/* Download Reports Button */}
             <button className="download-reports-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-download">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
