@@ -13,6 +13,7 @@ import GovtDashboard from './components/GovtDashboard.jsx';
 import GovtSchoolView from './components/GovtSchoolView.jsx';
 import SchoolTeachers from './components/SchoolTeachers.jsx';
 import TeacherProfile from './components/TeacherProfile.jsx';
+import StudentReports from './components/StudentReports.jsx';
 import sorifulPhoto from './assets/soriful.jpeg';
 
 const generateAttendanceData = () => {
@@ -208,8 +209,6 @@ function App() {
     };
 
     const allStudents = schoolsData.flatMap(s => s.students);
-    const allTeachers = schoolsData.flatMap(s => s.teachers);
-
     const teacherSchool = loggedInUser && loggedInUser.position ? schoolsData.find(s => s.teachers.some(t => t.id === loggedInUser.id)) : null;
 
     return (
@@ -235,6 +234,7 @@ function App() {
                                 <Route path="/student-dashboard" element={<StudentDashboard studentData={loggedInUser} />} />
                                 <Route path="/my-profile" element={<StudentProfile students={allStudents} loggedInStudentRoll={loggedInUser?.rollNumber} />} />
                                 <Route path="/attendance" element={<MonthlyAttendance studentData={loggedInUser} />} />
+                                <Route path="/reports" element={<StudentReports />} /> {/* FIX: Reports component */}
                             </>
                         )}
                         {isLoggedIn && userRole === 'school' && (
