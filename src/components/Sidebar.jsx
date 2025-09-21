@@ -19,7 +19,7 @@ function Sidebar({ userRole, loggedInUser }) {
                     <>
                         <li><NavLink to="/teacher-dashboard">Dashboard</NavLink></li>
                         <li><NavLink to="/students">Students</NavLink></li>
-                        <li><NavLink to={`/teacher-profile/${loggedInUser?.id}`}>My Profile</NavLink></li> {/* Updated Link */}
+                        <li><NavLink to={`/teacher-profile/${loggedInUser?.id}`}>My Profile</NavLink></li>
                         <li><NavLink to="/attendance">Attendance</NavLink></li>
                         <li><NavLink to="/reports">Reports</NavLink></li>
                     </>
@@ -27,7 +27,7 @@ function Sidebar({ userRole, loggedInUser }) {
             case 'school':
                 return (
                     <>
-                        <li><NavLink to="/school-dashboard">Dashboard</NavLink></li>
+                        <li><NavLink to={`/school-dashboard/${loggedInUser?.id}`}>Dashboard</NavLink></li> {/* Fix: Dynamic link */}
                         <li><NavLink to="/school-students">Students</NavLink></li>
                         <li><NavLink to="/school-teachers">Teachers</NavLink></li>
                         <li><NavLink to="/school-reports">Reports</NavLink></li>

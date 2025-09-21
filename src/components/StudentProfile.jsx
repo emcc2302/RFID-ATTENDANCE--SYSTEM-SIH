@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function StudentProfile({ students, loggedInStudentRoll }) {
@@ -22,7 +22,7 @@ function StudentProfile({ students, loggedInStudentRoll }) {
             
             {rollNumber && (
                 <button 
-                    onClick={() => navigate('/students')} 
+                    onClick={() => navigate(-1)} 
                     style={{ 
                         padding: '8px 15px', 
                         marginBottom: '20px', 

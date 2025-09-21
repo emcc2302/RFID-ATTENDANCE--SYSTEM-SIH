@@ -221,12 +221,12 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Login onLogin={handleLogin} />} />
                         <Route path="/student-profile/:rollNumber" element={<StudentProfile students={allStudents} />} />
+                        <Route path="/teacher-profile/:teacherId" element={<TeacherProfile schools={schoolsData} />} />
 
                         {isLoggedIn && userRole === 'teacher' && (
                             <>
                                 <Route path="/teacher-dashboard" element={<TeacherDashboard students={teacherSchool.students} />} />
                                 <Route path="/students" element={<TeacherStudentList students={teacherSchool.students} />} />
-                                <Route path="/teacher-profile/:teacherId" element={<TeacherProfile schools={schoolsData} />} />
                                 <Route path="/attendance" element={<p>This is the Attendance Page for Teachers</p>} />
                             </>
                         )}
@@ -242,14 +242,12 @@ function App() {
                                 <Route path="/school-dashboard/:schoolId" element={<SchoolDashboard schools={schoolsData} />} />
                                 <Route path="/school-students" element={<TeacherStudentList students={loggedInUser.students} />} />
                                 <Route path="/school-teachers" element={<SchoolTeachers teachers={loggedInUser.teachers} />} />
-                                <Route path="/teacher-profile/:teacherId" element={<TeacherProfile schools={schoolsData} />} />
                             </>
                         )}
                         {isLoggedIn && userRole === 'govt' && (
                             <>
                                 <Route path="/govt-dashboard" element={<GovtDashboard schools={schoolsData} />} />
                                 <Route path="/govt/school/:schoolId" element={<GovtSchoolView schools={schoolsData} />} />
-                                <Route path="/teacher-profile/:teacherId" element={<TeacherProfile schools={schoolsData} />} />
                             </>
                         )}
                     </Routes>
