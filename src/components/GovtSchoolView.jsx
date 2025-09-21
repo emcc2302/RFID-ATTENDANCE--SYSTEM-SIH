@@ -9,6 +9,20 @@ function GovtSchoolView({ schools }) {
 
     if (!school) return <p>School not found.</p>;
 
+    // Calculate overall attendance for the school
+    const allStudentRecords = school.students.flatMap(student => student.attendanceHistory);
+    const totalPresentRecords = allStudentRecords.filter(record => record.status === 'Present').length;
+    const totalRecords = allStudentRecords.length;
+    const overallAttendance = totalRecords > 0 ? ((totalPresentRecords / totalRecords) * 100).toFixed(1) : 0;
+
+    // Calculate today's attendance for the Midday Meal Count
+    const today = new Date().toISOString().split('T')[0];
+    const presentStudentsToday = school.students.filter(student => {
+        const todayAttendance = student.attendanceHistory.find(record => record.date === today);
+        return todayAttendance && todayAttendance.status === 'Present';
+    });
+    const middayMealCount = presentStudentsToday.length;
+    
     const handleStudentRowClick = (rollNumber) => {
         navigate(`/student-profile/${rollNumber}`);
     };
@@ -37,7 +51,30 @@ function GovtSchoolView({ schools }) {
                 <h2>{school.name} Details</h2>
             </div>
             
-            <h3 style={{marginTop: '20px'}}>Students</h3>
+            {/* NEW: School Summary Cards for Government Portal */}
+            <div style={{marginTop: '30px'}}>
+                <h3>School Summary</h3>
+                <div style={{ display: 'flex', gap: '20px', marginTop: '15px', flexWrap: 'wrap' }}>
+                    <div className="card">
+                        <h4>Total Students</h4>
+                        <p>{school.students.length}</p>
+                    </div>
+                    <div className="card">
+                        <h4>Total Teachers</h4>
+                        <p>{school.teachers.length}</p>
+                    </div>
+                    <div className="card">
+                        <h4>Midday Meal Count</h4>
+                        <p>{middayMealCount}</p>
+                    </div>
+                    <div className="card">
+                        <h4>Overall Attendance %</h4>
+                        <p>{overallAttendance}%</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style={{marginTop: '40px'}}>Students</h3>
             <table>
                 <thead>
                     <tr>
